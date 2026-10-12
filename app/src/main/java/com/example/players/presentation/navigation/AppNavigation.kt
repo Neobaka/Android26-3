@@ -1,4 +1,4 @@
-package com.example.players.ui.navigation
+package com.example.players.presentation.navigation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +8,12 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -22,16 +27,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.players.ui.details.PlayerDetailsScreen
-import com.example.players.ui.list.AppOrange
-import com.example.players.ui.list.PlayerListScreen
+import com.example.players.presentation.common.AppOrange
+import com.example.players.presentation.details.ProductDetailsScreen
+import com.example.players.presentation.list.ProductListScreen
 
 object Routes {
     const val HOME = "home"
     const val LIST = "list"
     const val VIDEO = "video"
     const val NOTIFICATIONS = "notifications"
-    const val DETAILS = "details/{playerId}"
+    const val DETAILS = "details/{productId}"
     fun details(id: Int) = "details/$id"
 }
 
@@ -52,7 +57,6 @@ fun AppNavigation() {
 
     Scaffold(
         bottomBar = {
-            // На экране деталей нижняя навигация скрыта (как на макете)
             if (currentRoute != Routes.DETAILS) {
                 NavigationBar(containerColor = Color.White) {
                     bottomItems.forEach { item ->
@@ -87,15 +91,15 @@ fun AppNavigation() {
         ) {
             composable(Routes.HOME) { Placeholder("Главная") }
             composable(Routes.LIST) {
-                PlayerListScreen(onPlayerClick = { navController.navigate(Routes.details(it)) })
+                ProductListScreen(onProductClick = { navController.navigate(Routes.details(it)) })
             }
             composable(Routes.VIDEO) { Placeholder("Видео") }
             composable(Routes.NOTIFICATIONS) { Placeholder("Уведомления") }
             composable(
                 route = Routes.DETAILS,
-                arguments = listOf(navArgument("playerId") { type = NavType.IntType })
+                arguments = listOf(navArgument("productId") { type = NavType.IntType })
             ) {
-                PlayerDetailsScreen(onBack = { navController.popBackStack() })
+                ProductDetailsScreen(onBack = { navController.popBackStack() })
             }
         }
     }
